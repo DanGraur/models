@@ -15,15 +15,11 @@ task:
     label_smoothing: 0.1
   train_data:
     aug_type:
-#      autoaug:
-#        cutout_const: 40
-#        augmentation_name:
-#        exclude_ops: [Cutout]
-#        magnitude: 9
-#        magnitude_std: 0.0
-#        num_layers: 2
-#        translate_const: 10
       type: autoaug
+      autoaug:
+        augmentation_name: 'v0'
+        cutout_const: 100
+        translate_const: 250
     enable_tf_data_service: false
     input_path: 'gs://tfdata-imagenet-eu/train/train*'
     is_training: true
@@ -32,6 +28,10 @@ task:
   validation_data:
     aug_type:
       type: autoaug
+      autoaug:
+        augmentation_name: 'v0'
+        cutout_const: 100
+        translate_const: 250
     enable_tf_data_service: false
     input_path: 'gs://tfdata-imagenet-eu/validation/valid*'
     is_training: false
