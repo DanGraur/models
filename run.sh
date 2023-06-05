@@ -26,7 +26,7 @@ log_dir=logs/${model}/${deployment_type}_$(date +%F_%H_%M_%S_%3N)
 mkdir -p ${log_dir}
 
 # Run the experiment
-python ${executable} \
+python3 ${executable} \
   --mode=train \
   --experiment=${experiment} \
   --config_file=${config_file} \
