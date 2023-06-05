@@ -33,7 +33,7 @@ from official.modeling.optimization import legacy_adamw
 FloatTensorLike = Union[tf.Tensor, float, np.float16, np.float32, np.float64]
 
 
-class Lookahead(tf.keras.optimizers.legacy.Optimizer):
+class Lookahead(tf.keras.optimizers.Optimizer):
   """This class allows to extend optimizers with the lookahead mechanism.
 
   The mechanism is proposed by Michael R. Zhang et.al in the paper [Lookahead
@@ -83,7 +83,7 @@ class Lookahead(tf.keras.optimizers.legacy.Optimizer):
       optimizer = tf.keras.optimizers.get(optimizer)
     if not isinstance(
         optimizer,
-        (tf.keras.optimizers.Optimizer, tf.keras.optimizers.legacy.Optimizer),
+        (tf.keras.optimizers.Optimizer, tf.keras.optimizers.Optimizer),
     ):
       raise TypeError(
           'optimizer is not an object of tf.keras.optimizers.Optimizer'
@@ -202,7 +202,7 @@ def build_optimizer(
       `ExponentialMovingAverage`.
 
   Returns:
-    A tf.keras.optimizers.legacy.Optimizer.
+    A tf.keras.optimizers.Optimizer.
 
   Raises:
     ValueError if the provided optimizer_name is not supported.

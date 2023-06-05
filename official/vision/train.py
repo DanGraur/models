@@ -29,6 +29,8 @@ from official.modeling import performance
 from official.vision import registry_imports  # pylint: disable=unused-import
 from official.vision.utils import summary_manager
 
+from sys import exit
+
 
 FLAGS = flags.FLAGS
 
@@ -84,6 +86,7 @@ def _run_experiment_with_preemption_recovery(params, model_dir):
 def main(_):
   gin.parse_config_files_and_bindings(FLAGS.gin_file, FLAGS.gin_params)
   params = train_utils.parse_configuration(FLAGS)
+  exit(0xff)
   model_dir = FLAGS.model_dir
   if 'train' in FLAGS.mode:
     # Pure eval modes do not output yaml files. Otherwise continuous eval job

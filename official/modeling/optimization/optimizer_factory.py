@@ -75,7 +75,7 @@ WARMUP_CLS = {
 def register_optimizer_cls(key: str,
                            optimizer_config_cls: Union[
                                tf.keras.optimizers.Optimizer,
-                               tf.keras.optimizers.legacy.Optimizer,
+                               tf.keras.optimizers.Optimizer,
                                tf.keras.optimizers.experimental.Optimizer
                            ],
                            use_legacy_optimizer: bool = True):
@@ -214,7 +214,7 @@ class OptimizerFactory:
       use_legacy_optimizer: A boolean that indicates if using legacy optimizers.
 
     Returns:
-      `tf.keras.optimizers.legacy.Optimizer` or
+      `tf.keras.optimizers.Optimizer` or
       `tf.keras.optimizers.experimental.Optimizer` instance.
     """
 
@@ -260,7 +260,7 @@ class OptimizerFactory:
       if isinstance(optimizer, tf.keras.optimizers.experimental.Optimizer):
         return optimizer
     if hasattr(tf.keras.optimizers, 'legacy'):
-      if isinstance(optimizer, tf.keras.optimizers.legacy.Optimizer):
+      if isinstance(optimizer, tf.keras.optimizers.Optimizer):
         return optimizer
     raise TypeError('OptimizerFactory.build_optimizer returning a '
                     'non-optimizer object: {}'.format(optimizer))

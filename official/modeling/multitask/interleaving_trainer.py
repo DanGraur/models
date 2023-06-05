@@ -33,7 +33,7 @@ class MultiTaskInterleavingTrainer(base_trainer.MultiTaskBaseTrainer):
                                        base_model.MultiTaskBaseModel],
                optimizer: Union[tf.optimizers.Optimizer,
                                 tf.keras.optimizers.experimental.Optimizer,
-                                tf.keras.optimizers.legacy.Optimizer],
+                                tf.keras.optimizers.Optimizer],
                task_sampler: sampler.TaskSampler,
                trainer_options=None):
     super().__init__(

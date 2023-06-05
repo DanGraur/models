@@ -58,7 +58,7 @@ class OptimizerFactoryTest(tf.test.TestCase, parameterized.TestCase):
         params=params,
         model=model)
     self.assertTrue(
-        issubclass(type(optimizer), tf.keras.optimizers.legacy.Optimizer)
+        issubclass(type(optimizer), tf.keras.optimizers.Optimizer)
     )
 
   def test_unknown_optimizer(self):
