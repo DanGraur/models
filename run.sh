@@ -8,12 +8,14 @@ additional_parameters=""
 if [ "${model}" == "resnet" ]; then
   experiment="resnet_imagenet"
   executable="official/vision/train.py"
+  base_path=`pwd`"/official/vision/configs/experiments/image_classification"
+  config_file="${base_path}/imagenet_resnet50_tpu_opensource_base.yaml"
   if [ -z "${dispatcher_address}" ]; then
-    config_file=`pwd`"/official/vision/configs/experiments/image_classification/imagenet_resnet50_tpu_without_service.yaml"
+    override_file="${base_path}/imagenet_resnet50_tpu_without_service.yaml"
   elif [ "${dispatcher_address}" == "ideal" ]; then
-    config_file=`pwd`"/official/vision/configs/experiments/image_classification/imagenet_resnet50_tpu_ideal_time.yaml"
+    override_file="${base_path}/imagenet_resnet50_tpu_ideal_time.yaml"
   else
-    config_file=`pwd`"/official/vision/configs/experiments/image_classification/imagenet_resnet50_tpu_with_service.yaml"
+    override_file="${base_path}/magenet_resnet50_tpu_with_service.yaml"
     additional_parameters="--tf_data_service=\"${dispatcher_address}\""
   fi
 elif [ "${model}" == "bert" ]; then
@@ -32,6 +34,7 @@ python3 ${executable} \
   --mode=train \
   --experiment=${experiment} \
   --config_file=${config_file} \
+  --params_override=${override_file} \
   --model_dir=${log_dir} \
   --tpu="local" \
   ${additional_parameters} | tee ${log_dir}/console.log
