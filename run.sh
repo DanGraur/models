@@ -31,4 +31,5 @@ python3 ${executable} \
   --experiment=${experiment} \
   --config_file=${config_file} \
   --model_dir=${log_dir} \
+  --tpu="local" \
   ${additional_parameters}
