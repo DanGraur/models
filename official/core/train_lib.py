@@ -218,7 +218,14 @@ class OrbitExperimentRunner:
         current = time.time()
         self.controller.train(steps=params.trainer.train_steps)
         current = time.time() - current
-        logging.info(f"!!! Completed training in: {current} seconds !!!")
+
+        # Logging logic
+        steps = params.trainer.train_steps
+        steps_sec = steps / current
+        log_message = (f"Metrics:\n\t> time={current}/s\n\t> "
+                       f"steps/s={steps_sec}\n\t> total_steps={steps}")
+        logging.info(log_message)
+        print(log_message)
       elif mode == 'train_and_eval':
         self.controller.train_and_evaluate(
             train_steps=params.trainer.train_steps,
