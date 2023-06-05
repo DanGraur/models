@@ -222,7 +222,7 @@ class OrbitExperimentRunner:
         # Logging logic
         steps = params.trainer.train_steps
         steps_sec = steps / current
-        log_message = (f"Metrics:\n\t> time={current}\n\t> "
+        log_message = (f"Metrics:\n\t> time [s]={current}\n\t> "
                        f"steps/s={steps_sec}\n\t> total_steps={steps}")
         logging.info(log_message)
         print(log_message)
