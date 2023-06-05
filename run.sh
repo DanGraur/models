@@ -34,4 +34,4 @@ python3 ${executable} \
   --config_file=${config_file} \
   --model_dir=${log_dir} \
   --tpu="local" \
-  ${additional_parameters}
+  ${additional_parameters} | tee ${log_dir}/console.log

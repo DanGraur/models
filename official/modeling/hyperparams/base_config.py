@@ -248,13 +248,13 @@ class Config(params_dict.ParamsDict):
         raise KeyError('The key {!r} is internally reserved. '
                        'Can not be overridden.'.format(k))
       if k not in self.__dict__:
-        # if is_strict:
-        #   raise KeyError('The key {!r} does not exist in {!r}. '
-        #                  'To extend the existing keys, use '
-        #                  '`override` with `is_strict` = False.'.format(
-        #                      k, type(self)))
-        # else:
-        self._set(k, v)
+        if is_strict:
+          raise KeyError('The key {!r} does not exist in {!r}. '
+                         'To extend the existing keys, use '
+                         '`override` with `is_strict` = False.'.format(
+                             k, type(self)))
+        else:
+          self._set(k, v)
       else:
         if isinstance(v, dict) and self.__dict__[k]:
           self.__dict__[k]._override(v, is_strict)  # pylint: disable=protected-access
