@@ -10,6 +10,8 @@ if [ "${model}" == "resnet" ]; then
   executable="official/vision/train.py"
   if [ -z "${dispatcher_address}" ]; then
     config_file=`pwd`"/official/vision/configs/experiments/image_classification/imagenet_resnet50_tpu_without_service.yaml"
+  elif [ "${dispatcher_address}" == "ideal" ]; then
+    config_file=`pwd`"/official/vision/configs/experiments/image_classification/imagenet_resnet50_tpu_ideal_time.yaml"
   else
     config_file=`pwd`"/official/vision/configs/experiments/image_classification/imagenet_resnet50_tpu_with_service.yaml"
     additional_parameters="--tf_data_service=\"${dispatcher_address}\""
