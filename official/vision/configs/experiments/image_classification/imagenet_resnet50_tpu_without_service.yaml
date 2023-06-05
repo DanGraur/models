@@ -14,18 +14,32 @@ task:
     one_hot: true
     label_smoothing: 0.1
   train_data:
+    aug_type:
+#      autoaug:
+#        cutout_const: 40
+#        augmentation_name:
+#        exclude_ops: [Cutout]
+#        magnitude: 9
+#        magnitude_std: 0.0
+#        num_layers: 2
+#        translate_const: 10
+      type: autoaug
+    enable_tf_data_service: false
     input_path: 'gs://tfdata-imagenet-eu/train/train*'
     is_training: true
     global_batch_size: 1024
     dtype: 'bfloat16'
   validation_data:
+    aug_type:
+      type: autoaug
+    enable_tf_data_service: false
     input_path: 'gs://tfdata-imagenet-eu/validation/valid*'
     is_training: false
     global_batch_size: 1024
     dtype: 'bfloat16'
     drop_remainder: false
 trainer:
-  train_steps: 28080
+  train_steps: 1251
   validation_steps: 13
   validation_interval: 312
   steps_per_loop: 312
