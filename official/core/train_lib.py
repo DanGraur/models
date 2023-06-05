@@ -29,6 +29,8 @@ from official.core import base_trainer
 from official.core import config_definitions
 from official.core import train_utils
 
+import time
+
 maybe_create_best_ckpt_exporter = train_utils.maybe_create_best_ckpt_exporter
 
 
@@ -210,9 +212,13 @@ class OrbitExperimentRunner:
     mode = self._mode
     params = self.params
     logging.info('Starts to execute mode: %s', mode)
+
     with self.strategy.scope():
       if mode == 'train' or mode == 'train_and_post_eval':
+        current = time.time()
         self.controller.train(steps=params.trainer.train_steps)
+        current = time.time() - current
+        logging.info(f"!!! Completed training in: {current} seconds !!!")
       elif mode == 'train_and_eval':
         self.controller.train_and_evaluate(
             train_steps=params.trainer.train_steps,
