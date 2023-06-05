@@ -283,6 +283,7 @@ class InputReader:
     self._tfds_split = params.tfds_split
     self._tfds_as_supervised = params.tfds_as_supervised
     self._tfds_skip_decoding_feature = params.tfds_skip_decoding_feature
+    self._get_ideal_time = params.get_ideal_time
 
     self._dataset_fn = dataset_fn
     self._decoder_fn = decoder_fn
@@ -501,7 +502,14 @@ class InputReader:
     dataset = self._decode_and_parse_dataset(dataset, self._global_batch_size,
                                              input_context)
     dataset = _maybe_map_fn(dataset, self._postprocess_fn)
-    dataset = self._maybe_apply_data_service(dataset, input_context)
+
+    # This option is applied when we want to find the ideal time of a job
+    if self._get_ideal_time:
+      logging.info("This run will get the ideal time via a "
+                   "take(1).cache().repeat()!")
+      dataset = dataset.take(1).cache().repeat()
+    else:
+      dataset = self._maybe_apply_data_service(dataset, input_context)
 
     if self._deterministic is not None:
       options = tf.data.Options()
