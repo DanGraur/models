@@ -53,7 +53,7 @@ class DataConfig(cfg.DataConfig):
   # Keep for backward compatibility.
   aug_policy: Optional[str] = None  # None, 'autoaug', or 'randaug'.
   randaug_magnitude: Optional[int] = 10
-  get_ideal_time = False
+  get_ideal_time: bool = False
 
 
 @dataclasses.dataclass
