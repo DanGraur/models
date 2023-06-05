@@ -14,20 +14,28 @@ task:
     one_hot: true
     label_smoothing: 0.1
   train_data:
+    aug_type:
+      type: autoaug
+      autoaug:
+        augmentation_name: 'v0'
+        cutout_const: 100
+        translate_const: 250
     enable_tf_data_service: true
     input_path: 'gs://tfdata-imagenet-eu/train/train*'
     is_training: true
     global_batch_size: 1024
-    shear: true
-    rotate: true
     dtype: 'bfloat16'
   validation_data:
+    aug_type:
+      type: autoaug
+      autoaug:
+        augmentation_name: 'v0'
+        cutout_const: 100
+        translate_const: 250
     enable_tf_data_service: true
     input_path: 'gs://tfdata-imagenet-eu/validation/valid*'
     is_training: false
     global_batch_size: 1024
-    shear: true
-    rotate: true
     dtype: 'bfloat16'
     drop_remainder: false
 trainer:
@@ -36,7 +44,7 @@ trainer:
   validation_interval: 312
   steps_per_loop: 312
   summary_interval: 312
-  checkpoint_interval: 312
+  checkpoint_interval: 1000000
   optimizer_config:
     optimizer:
       type: 'sgd'

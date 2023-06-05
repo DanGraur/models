@@ -44,7 +44,7 @@ trainer:
   validation_interval: 312
   steps_per_loop: 312
   summary_interval: 312
-  checkpoint_interval: 312
+  checkpoint_interval: 1000000
   optimizer_config:
     optimizer:
       type: 'sgd'
