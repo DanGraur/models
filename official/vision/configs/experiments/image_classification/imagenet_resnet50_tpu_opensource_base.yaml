@@ -20,6 +20,7 @@ task:
         augmentation_name: 'v0'
         cutout_const: 100
         translate_const: 250
+    color_jitter: 0.5
     enable_tf_data_service: true
     input_path: 'gs://tfdata-imagenet-eu/train/train*'
     is_training: true
@@ -32,6 +33,7 @@ task:
         augmentation_name: 'v0'
         cutout_const: 100
         translate_const: 250
+    color_jitter: 0.5
     enable_tf_data_service: true
     input_path: 'gs://tfdata-imagenet-eu/validation/valid*'
     is_training: false
