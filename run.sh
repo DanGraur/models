@@ -18,7 +18,7 @@ if [ "${model}" == "resnet" ]; then
     override_file="${base_path}/imagenet_resnet50_tpu_ideal_time.yaml"
   else
     deployment_type="disaggregated"
-    override_file="${base_path}/magenet_resnet50_tpu_with_service.yaml"
+    override_file="${base_path}/imagenet_resnet50_tpu_with_service.yaml"
     additional_parameters="--tf_data_service=\"${dispatcher_address}\""
   fi
 elif [ "${model}" == "bert" ]; then
