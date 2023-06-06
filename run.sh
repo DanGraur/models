@@ -19,7 +19,7 @@ if [ "${model}" == "resnet" ]; then
   else
     deployment_type="disaggregated"
     override_file="${base_path}/imagenet_resnet50_tpu_with_service.yaml"
-    additional_parameters="--tf_data_service=\"${dispatcher_address}\""
+    additional_parameters="--tf_data_service=grpc://${dispatcher_address}:31000"
   fi
 elif [ "${model}" == "bert" ]; then
   echo "BERT is not supported yet!"
