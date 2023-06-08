@@ -1,0 +1,22 @@
+runtime:
+  distribution_strategy: 'tpu'
+task:
+  train_data:
+    enable_tf_data_service: false
+    tfds_name: 'huggingface:wikitext/wikitext-2-v1'
+    tfds_data_dir: '/home/dan/tfds_data'
+    tfds_split: 'train'
+    is_training: true
+  validation_data:
+    enable_tf_data_service: false
+    tfds_name: 'huggingface:wikitext/wikitext-2-v1'
+    tfds_data_dir: '/home/dan/tfds_data'
+    tfds_split: 'test'
+    is_training: false
+trainer:
+  train_steps: 3000
+  validation_steps: 16
+  validation_interval: 1000000
+  steps_per_loop: 1000
+  summary_interval: 1000
+  checkpoint_interval: 1000000

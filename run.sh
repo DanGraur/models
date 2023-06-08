@@ -22,7 +22,18 @@ if [ "${model}" == "resnet" ]; then
     additional_parameters="--tf_data_service=grpc://${dispatcher_address}:31000"
   fi
 elif [ "${model}" == "bert" ]; then
-  echo "BERT is not supported yet!"
+  experiment="bert/pretraining"
+  executable="official/nlp/train.py"
+  base_path=`pwd`"/official/nlp/configs/experiments"
+  config_file="${base_path}/bert_pretraining_opensource_base.yaml"
+  if [ -z "${dispatcher_address}" ]; then
+    deployment_type="non_coordinated"
+    override_file="${base_path}/bert_pretraining_non_coordinated.yaml"
+  else
+    deployment_type="coordinated"
+    override_file="${base_path}/bert_pretraining_coordinated.yaml"
+    additional_parameters="--tf_data_service=grpc://${dispatcher_address}:31000"
+  fi
 else
   echo "Model ${model} is not supported. Only valid options are: \"resnet\" and \"bert\"!"
 fi

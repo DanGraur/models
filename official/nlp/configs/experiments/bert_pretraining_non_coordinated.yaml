@@ -1,0 +1,7 @@
+runtime:
+  distribution_strategy: 'tpu'
+task:
+  train_data:
+    enable_tf_data_service: false
+  validation_data:
+    enable_tf_data_service: false

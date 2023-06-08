@@ -28,8 +28,5 @@ def register_config_factory(name):
 
 def get_exp_config(exp_name: str) -> cfg.ExperimentConfig:
   """Looks up the `ExperimentConfig` according to the `exp_name`."""
-  print(registry)
-  import sys
-  sys.exit(1)
   exp_creater = registry.lookup(_REGISTERED_CONFIGS, exp_name)
   return exp_creater()
