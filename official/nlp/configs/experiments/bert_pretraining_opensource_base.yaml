@@ -1,6 +1,6 @@
 runtime:
   distribution_strategy: 'tpu'
-    mixed_precision_dtype: 'bfloat16'
+  mixed_precision_dtype: 'bfloat16'
 task:
   model:
     cls_heads: [{activation: tanh, cls_token_idx: 0, dropout_rate: 0.1, inner_dim: 768, name: next_sentence, num_classes: 2}]
