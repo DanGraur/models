@@ -6,7 +6,6 @@ task:
     cls_heads: [{activation: tanh, cls_token_idx: 0, dropout_rate: 0.1, inner_dim: 768, name: next_sentence, num_classes: 2}]
   train_data:
     enable_tf_data_service: false
-    tfds_skip_decoding_feature: true
     tfds_name: 'huggingface:wikitext/wikitext-2-v1'
     tfds_data_dir: '/home/dan/tfds_data'
     tfds_split: 'train'
@@ -21,7 +20,6 @@ task:
     use_v2_feature_names: true
   validation_data:
     enable_tf_data_service: false
-    tfds_skip_decoding_feature: true
     tfds_name: 'huggingface:wikitext/wikitext-2-v1'
     tfds_data_dir: '/home/dan/tfds_data'
     tfds_split: 'test'
