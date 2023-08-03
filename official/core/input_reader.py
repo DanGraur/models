@@ -450,8 +450,13 @@ class InputReader:
     else:
       per_replica_batch_size = input_context.get_per_replica_batch_size(
           batch_size) if input_context else batch_size
-      dataset = dataset.batch(
-          per_replica_batch_size, drop_remainder=self._drop_remainder)
+      # dataset = dataset.batch(
+      #     per_replica_batch_size, drop_remainder=self._drop_remainder)
+      dataset = dataset.bucket_by_sequence_length(
+        element_length_func=lambda elem: tf.size(elem['premise']),
+        bucket_boundaries=[64, 128, 256],
+        bucket_batch_sizes=[per_replica_batch_size, per_replica_batch_size,
+                            per_replica_batch_size, per_replica_batch_size])
 
     return dataset
 
