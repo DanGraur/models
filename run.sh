@@ -6,7 +6,7 @@ dispatcher_address=${2:-""}
 # Prepare the experiment parameters
 additional_parameters=""
 if [ "${model}" == "yolo" ]; then
-  experiment="resnet_imagenet"
+  experiment="yolo_darknet"
   executable="official/projects/yolo/train.py"
   base_path=`pwd`"/official/projects/yolo/configs/experiments/yolov4/detection"
   config_file="${base_path}/yolov4_512_tpu_base.yaml"
@@ -58,11 +58,10 @@ mkdir -p ${log_dir}
 # Run the experiment
 python3 ${executable} \
   --mode=train \
-#  --experiment=${experiment} \
+  --experiment=${experiment} \
   --config_file=${config_file} \
 #  --params_override=${override_file} \
   --model_dir=${log_dir} \
   --tpu="local" \
-  --log_dir=${log_dir}/absl_out.log \
+  --log_dir=${log_dir}/absl_out.log | tee ${log_dir}/console.log
 #  ${additional_parameters} | tee ${log_dir}/console.log
-  | tee ${log_dir}/console.log
