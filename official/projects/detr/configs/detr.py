@@ -79,9 +79,11 @@ class DetrTask(cfg.TaskConfig):
   per_category_metrics: bool = False
 
 
-COCO_INPUT_PATH_BASE = 'coco'
+COCO_INPUT_PATH_BASE = 'gs://tfdata-coco-eu'
 COCO_TRAIN_EXAMPLES = 118287
 COCO_VAL_EXAMPLES = 5000
+
+EPOCH_COUNT = 1  # 500
 
 
 @exp_factory.register_config_factory('detr_coco')
@@ -90,9 +92,9 @@ def detr_coco() -> cfg.ExperimentConfig:
   train_batch_size = 64
   eval_batch_size = 64
   num_train_data = COCO_TRAIN_EXAMPLES
-  num_steps_per_epoch = num_train_data // train_batch_size
-  train_steps = 500 * num_steps_per_epoch  # 500 epochs
-  decay_at = train_steps - 100 * num_steps_per_epoch  # 400 epochs
+  steps_per_epoch = num_train_data // train_batch_size
+  train_steps = EPOCH_COUNT * steps_per_epoch  # 300 epochs
+  decay_at = max(train_steps, train_steps - 100 * steps_per_epoch)  # 200 epochs
   config = cfg.ExperimentConfig(
       task=DetrTask(
           init_checkpoint='',
@@ -103,15 +105,17 @@ def detr_coco() -> cfg.ExperimentConfig:
               norm_activation=common.NormActivation()),
           losses=Losses(),
           train_data=coco.COCODataConfig(
-              tfds_name='coco/2017',
-              tfds_split='train',
+              input_path="gs://tfdata-coco-eu/train*",
+              # tfds_name='coco/2017',
+              # tfds_split='train',
               is_training=True,
               global_batch_size=train_batch_size,
               shuffle_buffer_size=1000,
           ),
           validation_data=coco.COCODataConfig(
-              tfds_name='coco/2017',
-              tfds_split='validation',
+            input_path="gs://tfdata-coco-eu/val*",
+              # tfds_name='coco/2017',
+              # tfds_split='validation',
               is_training=False,
               global_batch_size=eval_batch_size,
               drop_remainder=False)),
@@ -120,8 +124,8 @@ def detr_coco() -> cfg.ExperimentConfig:
           validation_steps=-1,
           steps_per_loop=10000,
           summary_interval=10000,
-          checkpoint_interval=10000,
-          validation_interval=10000,
+          checkpoint_interval=1000000,
+          validation_interval=1000000,
           max_to_keep=1,
           best_checkpoint_export_subdir='best_ckpt',
           best_checkpoint_eval_metric='AP',
@@ -155,8 +159,9 @@ def detr_coco_tfrecord() -> cfg.ExperimentConfig:
   train_batch_size = 64
   eval_batch_size = 64
   steps_per_epoch = COCO_TRAIN_EXAMPLES // train_batch_size
-  train_steps = 300 * steps_per_epoch  # 300 epochs
-  decay_at = train_steps - 100 * steps_per_epoch  # 200 epochs
+  train_steps = EPOCH_COUNT * steps_per_epoch  # 300 epochs
+  decay_at = max(train_steps, train_steps - 100 * steps_per_epoch)  # 200 epochs
+
   config = cfg.ExperimentConfig(
       task=DetrTask(
           init_checkpoint='',
@@ -219,8 +224,8 @@ def detr_coco_tfds() -> cfg.ExperimentConfig:
   train_batch_size = 64
   eval_batch_size = 64
   steps_per_epoch = COCO_TRAIN_EXAMPLES // train_batch_size
-  train_steps = 300 * steps_per_epoch  # 300 epochs
-  decay_at = train_steps - 100 * steps_per_epoch  # 200 epochs
+  train_steps = EPOCH_COUNT * steps_per_epoch  # 300 epochs
+  decay_at = max(train_steps, train_steps - 100 * steps_per_epoch)  # 200 epochs
   config = cfg.ExperimentConfig(
       task=DetrTask(
           init_checkpoint='',
