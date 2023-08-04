@@ -147,7 +147,7 @@ class RuntimeConfig(base_config.Config):
   task_index: int = -1
   all_reduce_alg: Optional[str] = None
   num_packs: int = 1
-  mixed_precision_dtype: Optional[str] = 'bfloat16'
+  mixed_precision_dtype: Optional[str] = None
   loss_scale: Optional[Union[str, float]] = None
   run_eagerly: bool = False
   batchnorm_spatial_persistent: bool = False
