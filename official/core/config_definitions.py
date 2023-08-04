@@ -136,18 +136,18 @@ class RuntimeConfig(base_config.Config):
     batchnorm_spatial_persistent: Whether or not to enable the spatial
       persistent mode for CuDNN batch norm kernel for improved GPU performance.
   """
-  distribution_strategy: str = "mirrored"
+  distribution_strategy: str = "tpu"
   enable_xla: bool = False
   gpu_thread_mode: Optional[str] = None
   dataset_num_private_threads: Optional[int] = None
   per_gpu_thread_count: int = 0
-  tpu: Optional[str] = None
+  tpu: Optional[str] = "local"
   num_gpus: int = 0
   worker_hosts: Optional[str] = None
   task_index: int = -1
   all_reduce_alg: Optional[str] = None
   num_packs: int = 1
-  mixed_precision_dtype: Optional[str] = None
+  mixed_precision_dtype: Optional[str] = 'bfloat16'
   loss_scale: Optional[Union[str, float]] = None
   run_eagerly: bool = False
   batchnorm_spatial_persistent: bool = False

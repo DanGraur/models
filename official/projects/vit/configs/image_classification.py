@@ -32,6 +32,8 @@ from official.vision.tasks import image_classification
 DataConfig = img_cls_cfg.DataConfig
 
 
+EPOCHS = 1
+
 @dataclasses.dataclass
 class ImageClassificationModel(img_cls_cfg.ImageClassificationModel):
   """The model config."""
@@ -68,7 +70,7 @@ class ImageClassificationTask(cfg.TaskConfig):
 
 IMAGENET_TRAIN_EXAMPLES = 1281167
 IMAGENET_VAL_EXAMPLES = 50000
-IMAGENET_INPUT_PATH_BASE = 'imagenet-2012-tfrecord'
+IMAGENET_INPUT_PATH_BASE = 'gs://tfdata-imagenet-eu'
 
 # TODO(b/177942984): integrate the experiments to TF-vision.
 task_factory.register_task_cls(ImageClassificationTask)(
@@ -104,7 +106,7 @@ def image_classification_imagenet_deit_pretrain() -> cfg.ExperimentConfig:
               one_hot=False,
               soft_labels=True),
           train_data=DataConfig(
-              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train*'),
+              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train', 'train*'),
               is_training=True,
               global_batch_size=train_batch_size,
               aug_type=common.Augmentation(
@@ -114,16 +116,16 @@ def image_classification_imagenet_deit_pretrain() -> cfg.ExperimentConfig:
               mixup_and_cutmix=common.MixupAndCutmix(
                   label_smoothing=label_smoothing)),
           validation_data=DataConfig(
-              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'valid*'),
+              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
               global_batch_size=eval_batch_size)),
       trainer=cfg.TrainerConfig(
           steps_per_loop=steps_per_epoch,
           summary_interval=steps_per_epoch,
           checkpoint_interval=steps_per_epoch,
-          train_steps=300 * steps_per_epoch,
+          train_steps=EPOCHS * steps_per_epoch,
           validation_steps=IMAGENET_VAL_EXAMPLES // eval_batch_size,
-          validation_interval=steps_per_epoch,
+          validation_interval=2 * steps_per_epoch,
           optimizer_config=optimization.OptimizationConfig({
               'optimizer': {
                   'type': 'adamw',
@@ -174,20 +176,20 @@ def image_classification_imagenet_vit_pretrain() -> cfg.ExperimentConfig:
                       model_name='vit-b16', representation_size=768))),
           losses=Losses(l2_weight_decay=0.0),
           train_data=DataConfig(
-              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train*'),
+              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train', 'train*'),
               is_training=True,
               global_batch_size=train_batch_size),
           validation_data=DataConfig(
-              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'valid*'),
+              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
               global_batch_size=eval_batch_size)),
       trainer=cfg.TrainerConfig(
           steps_per_loop=steps_per_epoch,
           summary_interval=steps_per_epoch,
           checkpoint_interval=steps_per_epoch,
-          train_steps=300 * steps_per_epoch,
+          train_steps=EPOCHS * steps_per_epoch,
           validation_steps=IMAGENET_VAL_EXAMPLES // eval_batch_size,
-          validation_interval=steps_per_epoch,
+          validation_interval=2 * EPOCHS * steps_per_epoch,
           optimizer_config=optimization.OptimizationConfig({
               'optimizer': {
                   'type': 'adamw',
@@ -236,11 +238,11 @@ def image_classification_imagenet_vit_finetune() -> cfg.ExperimentConfig:
                   vit=backbones.VisionTransformer(model_name='vit-b16'))),
           losses=Losses(l2_weight_decay=0.0),
           train_data=DataConfig(
-              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train*'),
+              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train', 'train*'),
               is_training=True,
               global_batch_size=train_batch_size),
           validation_data=DataConfig(
-              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'valid*'),
+              input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
               global_batch_size=eval_batch_size)),
       trainer=cfg.TrainerConfig(
@@ -249,7 +251,7 @@ def image_classification_imagenet_vit_finetune() -> cfg.ExperimentConfig:
           checkpoint_interval=steps_per_epoch,
           train_steps=20000,
           validation_steps=IMAGENET_VAL_EXAMPLES // eval_batch_size,
-          validation_interval=steps_per_epoch,
+          validation_interval=2 * EPOCHS * steps_per_epoch,
           optimizer_config=optimization.OptimizationConfig({
               'optimizer': {
                   'type': 'sgd',
