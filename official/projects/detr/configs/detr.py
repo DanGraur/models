@@ -191,7 +191,7 @@ def detr_coco_tfrecord() -> cfg.ExperimentConfig:
           summary_interval=steps_per_epoch,
           checkpoint_interval=steps_per_epoch,
           validation_interval=5 * steps_per_epoch,
-          max_to_keep=0,
+          max_to_keep=1,
           best_checkpoint_export_subdir='best_ckpt',
           best_checkpoint_eval_metric='AP',
           optimizer_config=optimization.OptimizationConfig({
