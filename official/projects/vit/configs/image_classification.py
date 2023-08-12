@@ -116,7 +116,7 @@ def image_classification_imagenet_deit_pretrain() -> cfg.ExperimentConfig:
                   randaug=common.RandAugment(
                       magnitude=9, exclude_ops=['Cutout'])),
               mixup_and_cutmix=common.MixupAndCutmix(
-                  label_smoothing=label_smoothing),
+                  label_smoothing=label_smoothing)),
           validation_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
