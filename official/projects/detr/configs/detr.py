@@ -40,6 +40,7 @@ class DataConfig(cfg.DataConfig):
   shuffle_buffer_size: int = 10000
   file_type: str = 'tfrecord'
   drop_remainder: bool = True
+  get_ideal_time: bool = False
 
 
 @dataclasses.dataclass
@@ -156,8 +157,7 @@ def detr_coco() -> cfg.ExperimentConfig:
 @exp_factory.register_config_factory('detr_coco_tfrecord')
 def detr_coco_tfrecord() -> cfg.ExperimentConfig:
   """Config to get results that matches the paper."""
-  train_batch_size = 64
-  eval_batch_size = 64
+  train_batch_size = eval_batch_size = 8  # Needs to be reduced to fit into mem
   steps_per_epoch = COCO_TRAIN_EXAMPLES // train_batch_size
   train_steps = EPOCH_COUNT * steps_per_epoch  # 300 epochs
   decay_at = max(train_steps, train_steps - 100 * steps_per_epoch)  # 200 epochs

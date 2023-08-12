@@ -33,6 +33,8 @@ DataConfig = img_cls_cfg.DataConfig
 
 
 EPOCHS = 1
+BATCH_SIZE = 32
+GET_IDEAL_TIME = False
 
 @dataclasses.dataclass
 class ImageClassificationModel(img_cls_cfg.ImageClassificationModel):
@@ -80,8 +82,8 @@ task_factory.register_task_cls(ImageClassificationTask)(
 @exp_factory.register_config_factory('deit_imagenet_pretrain')
 def image_classification_imagenet_deit_pretrain() -> cfg.ExperimentConfig:
   """Image classification on imagenet with vision transformer."""
-  train_batch_size = 4096  # originally was 1024 but 4096 better for tpu v3-32
-  eval_batch_size = 4096  # originally was 1024 but 4096 better for tpu v3-32
+  train_batch_size = BATCH_SIZE  # originally was 1024 but 4096 better for tpu v3-32
+  eval_batch_size = BATCH_SIZE  # originally was 1024 but 4096 better for tpu v3-32
   num_classes = 1001
   label_smoothing = 0.1
   steps_per_epoch = IMAGENET_TRAIN_EXAMPLES // train_batch_size
@@ -114,11 +116,13 @@ def image_classification_imagenet_deit_pretrain() -> cfg.ExperimentConfig:
                   randaug=common.RandAugment(
                       magnitude=9, exclude_ops=['Cutout'])),
               mixup_and_cutmix=common.MixupAndCutmix(
-                  label_smoothing=label_smoothing)),
+                  label_smoothing=label_smoothing),
+              get_ideal_time=GET_IDEAL_TIME),
           validation_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
-              global_batch_size=eval_batch_size)),
+              global_batch_size=eval_batch_size,
+              get_ideal_time=GET_IDEAL_TIME)),
       trainer=cfg.TrainerConfig(
           steps_per_loop=steps_per_epoch,
           summary_interval=steps_per_epoch,
@@ -161,8 +165,8 @@ def image_classification_imagenet_deit_pretrain() -> cfg.ExperimentConfig:
 @exp_factory.register_config_factory('vit_imagenet_pretrain')
 def image_classification_imagenet_vit_pretrain() -> cfg.ExperimentConfig:
   """Image classification on imagenet with vision transformer."""
-  train_batch_size = 4096
-  eval_batch_size = 4096
+  train_batch_size = BATCH_SIZE
+  eval_batch_size = BATCH_SIZE
   steps_per_epoch = IMAGENET_TRAIN_EXAMPLES // train_batch_size
   config = cfg.ExperimentConfig(
       task=ImageClassificationTask(
@@ -178,11 +182,13 @@ def image_classification_imagenet_vit_pretrain() -> cfg.ExperimentConfig:
           train_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train', 'train*'),
               is_training=True,
-              global_batch_size=train_batch_size),
+              global_batch_size=train_batch_size,
+              get_ideal_time=GET_IDEAL_TIME),
           validation_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
-              global_batch_size=eval_batch_size)),
+              global_batch_size=eval_batch_size,
+              get_ideal_time=GET_IDEAL_TIME)),
       trainer=cfg.TrainerConfig(
           steps_per_loop=steps_per_epoch,
           summary_interval=steps_per_epoch,
@@ -225,8 +231,8 @@ def image_classification_imagenet_vit_pretrain() -> cfg.ExperimentConfig:
 @exp_factory.register_config_factory('vit_imagenet_finetune')
 def image_classification_imagenet_vit_finetune() -> cfg.ExperimentConfig:
   """Image classification on imagenet with vision transformer."""
-  train_batch_size = 512
-  eval_batch_size = 512
+  train_batch_size = BATCH_SIZE
+  eval_batch_size = BATCH_SIZE
   steps_per_epoch = IMAGENET_TRAIN_EXAMPLES // train_batch_size
   config = cfg.ExperimentConfig(
       task=ImageClassificationTask(
@@ -240,11 +246,13 @@ def image_classification_imagenet_vit_finetune() -> cfg.ExperimentConfig:
           train_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train', 'train*'),
               is_training=True,
-              global_batch_size=train_batch_size),
+              global_batch_size=train_batch_size,
+              get_ideal_time=GET_IDEAL_TIME),
           validation_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
-              global_batch_size=eval_batch_size)),
+              global_batch_size=eval_batch_size,
+              get_ideal_time=GET_IDEAL_TIME)),
       trainer=cfg.TrainerConfig(
           steps_per_loop=steps_per_epoch,
           summary_interval=steps_per_epoch,
