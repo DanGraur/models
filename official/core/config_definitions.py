@@ -103,7 +103,7 @@ class DataConfig(base_config.Config):
   tfds_skip_decoding_feature: str = ""
   seed: Optional[int] = None
   prefetch_buffer_size: Optional[int] = None
-  get_ideal_time = False
+  get_ideal_time: bool = False
 
 
 @dataclasses.dataclass

@@ -117,12 +117,10 @@ def image_classification_imagenet_deit_pretrain() -> cfg.ExperimentConfig:
                       magnitude=9, exclude_ops=['Cutout'])),
               mixup_and_cutmix=common.MixupAndCutmix(
                   label_smoothing=label_smoothing),
-              get_ideal_time=GET_IDEAL_TIME),
           validation_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
-              global_batch_size=eval_batch_size,
-              get_ideal_time=GET_IDEAL_TIME)),
+              global_batch_size=eval_batch_size)),
       trainer=cfg.TrainerConfig(
           steps_per_loop=steps_per_epoch,
           summary_interval=steps_per_epoch,
@@ -182,13 +180,11 @@ def image_classification_imagenet_vit_pretrain() -> cfg.ExperimentConfig:
           train_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train', 'train*'),
               is_training=True,
-              global_batch_size=train_batch_size,
-              get_ideal_time=GET_IDEAL_TIME),
+              global_batch_size=train_batch_size),
           validation_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
-              global_batch_size=eval_batch_size,
-              get_ideal_time=GET_IDEAL_TIME)),
+              global_batch_size=eval_batch_size)),
       trainer=cfg.TrainerConfig(
           steps_per_loop=steps_per_epoch,
           summary_interval=steps_per_epoch,
@@ -246,13 +242,11 @@ def image_classification_imagenet_vit_finetune() -> cfg.ExperimentConfig:
           train_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'train', 'train*'),
               is_training=True,
-              global_batch_size=train_batch_size,
-              get_ideal_time=GET_IDEAL_TIME),
+              global_batch_size=train_batch_size),
           validation_data=DataConfig(
               input_path=os.path.join(IMAGENET_INPUT_PATH_BASE, 'validation', 'valid*'),
               is_training=False,
-              global_batch_size=eval_batch_size,
-              get_ideal_time=GET_IDEAL_TIME)),
+              global_batch_size=eval_batch_size)),
       trainer=cfg.TrainerConfig(
           steps_per_loop=steps_per_epoch,
           summary_interval=steps_per_epoch,

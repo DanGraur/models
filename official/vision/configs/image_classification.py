@@ -46,11 +46,11 @@ class DataConfig(cfg.DataConfig):
   decode_jpeg_only: bool = True
   mixup_and_cutmix: Optional[common.MixupAndCutmix] = None
   decoder: Optional[common.DataDecoder] = common.DataDecoder()
+  get_ideal_time: bool = False
 
   # Keep for backward compatibility.
   aug_policy: Optional[str] = None  # None, 'autoaug', or 'randaug'.
   randaug_magnitude: Optional[int] = 10
-  get_ideal_time = False
 
 
 @dataclasses.dataclass
