@@ -27,6 +27,9 @@ from official.vision.configs import backbones
 from official.vision.configs import common
 
 
+BATCH_SIZE = 8
+GET_IDEAL_TIME = False
+
 @dataclasses.dataclass
 class DataConfig(cfg.DataConfig):
   """Input config for training."""
@@ -40,7 +43,7 @@ class DataConfig(cfg.DataConfig):
   shuffle_buffer_size: int = 10000
   file_type: str = 'tfrecord'
   drop_remainder: bool = True
-  get_ideal_time: bool = False
+  get_ideal_time: bool = GET_IDEAL_TIME
 
 
 @dataclasses.dataclass
@@ -90,8 +93,8 @@ EPOCH_COUNT = 1  # 500
 @exp_factory.register_config_factory('detr_coco')
 def detr_coco() -> cfg.ExperimentConfig:
   """Config to get results that matches the paper."""
-  train_batch_size = 64
-  eval_batch_size = 64
+  train_batch_size = BATCH_SIZE
+  eval_batch_size = BATCH_SIZE
   num_train_data = COCO_TRAIN_EXAMPLES
   steps_per_epoch = num_train_data // train_batch_size
   train_steps = EPOCH_COUNT * steps_per_epoch  # 300 epochs
@@ -221,8 +224,8 @@ def detr_coco_tfrecord() -> cfg.ExperimentConfig:
 @exp_factory.register_config_factory('detr_coco_tfds')
 def detr_coco_tfds() -> cfg.ExperimentConfig:
   """Config to get results that matches the paper."""
-  train_batch_size = 64
-  eval_batch_size = 64
+  train_batch_size = BATCH_SIZE
+  eval_batch_size = BATCH_SIZE
   steps_per_epoch = COCO_TRAIN_EXAMPLES // train_batch_size
   train_steps = EPOCH_COUNT * steps_per_epoch  # 300 epochs
   decay_at = max(train_steps, train_steps - 100 * steps_per_epoch)  # 200 epochs
