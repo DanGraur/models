@@ -9,8 +9,12 @@ mkdir -p ${log_dir}
 
 # Prepare the experiment parameters
 additional_parameters=""
-if [ "${model}" == "vit" ]; then
-  experiment="vit_imagenet_pretrain"
+if [ "${model}" == "vit" ] || [ "${model}" == "dit" ]; then
+  if [ "${model}" == "vit" ]; then
+    experiment="vit_imagenet_pretrain"
+  else
+    experiment="deit_imagenet_pretrain"
+  fi
   executable="official/projects/vit/train.py"
 
   # Run the experiment
