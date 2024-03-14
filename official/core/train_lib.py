@@ -263,7 +263,8 @@ class OrbitExperimentRunner:
     logging.info('Starts to execute mode: %s', mode)
     with self.strategy.scope():
       if mode == 'train' or mode == 'train_and_post_eval':
-        self.controller.train(steps=params.trainer.train_steps)
+        self.controller.train(steps=params.trainer.train_steps,
+                              batch_size=params.task.train_data.global_batch_size)
       elif mode == 'train_and_eval':
         self.controller.train_and_evaluate(
             train_steps=params.trainer.train_steps,
