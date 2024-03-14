@@ -66,6 +66,8 @@ class Parser(parser.Parser):
                decode_jpeg_only: bool = True,
                aug_rand_hflip: bool = True,
                aug_crop: Optional[bool] = True,
+               shear: Optional[bool] = False,
+               rotate: Optional[bool] = False,
                aug_type: Optional[common.Augmentation] = None,
                color_jitter: float = 0.,
                random_erasing: Optional[common.RandomErasing] = None,
@@ -163,6 +165,9 @@ class Parser(parser.Parser):
     self._tf_resize_method = tf_resize_method
     self._three_augment = three_augment
 
+    self._shear = shear
+    self._rotate = rotate
+
   def _parse_train_data(self, decoded_tensors):
     """Parses data for training."""
     image = self._parse_train_image(decoded_tensors)
@@ -231,6 +236,11 @@ class Parser(parser.Parser):
       image = preprocess_ops.color_jitter(image, self._color_jitter,
                                           self._color_jitter,
                                           self._color_jitter)
+
+    # Shear and rotate
+
+    if self._shear:
+      pass
 
     # Resizes image.
     image = tf.image.resize(

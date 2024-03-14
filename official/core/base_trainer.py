@@ -396,8 +396,12 @@ class Trainer(_AsyncTrainer):
       self._train_loss.update_state(logs[self.task.loss])
       self.global_step.assign_add(1)
 
+    # EASL: simply fetch the data, but avoid actually training; this is useful
+    #       because we want to see the max throughput for the AUTOTUNED fully
+    #       canonical input pipeline.
     inputs = self.next_train_inputs(iterator)
-    self.strategy.run(step_fn, args=(inputs,), options=self._runtime_options)
+    # print(f"Printing inputs {inputs}")
+    # self.strategy.run(step_fn, args=(inputs,), options=self._runtime_options)
 
   def eval_begin(self):
     """Sets up metrics."""

@@ -27,3 +27,5 @@ sentencepiece
 sacrebleu
 # Projects/vit dependencies
 immutabledict
+# For recommender models
+tensorflow-recommenders==0.7.2

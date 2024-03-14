@@ -25,6 +25,8 @@ from official.vision.configs import common
 from official.vision.configs import backbones
 
 
+EPOCHS = 2
+
 @dataclasses.dataclass
 class DataConfig(cfg.DataConfig):
   """Input config for training."""
@@ -177,7 +179,7 @@ def image_classification_imagenet() -> cfg.ExperimentConfig:
           steps_per_loop=steps_per_epoch,
           summary_interval=steps_per_epoch,
           checkpoint_interval=steps_per_epoch,
-          train_steps=90 * steps_per_epoch,
+          train_steps=EPOCHS * steps_per_epoch,
           validation_steps=IMAGENET_VAL_EXAMPLES // eval_batch_size,
           validation_interval=steps_per_epoch,
           optimizer_config=optimization.OptimizationConfig({

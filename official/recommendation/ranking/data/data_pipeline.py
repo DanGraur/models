@@ -58,11 +58,11 @@ class CriteoTsvReader:
       """Parser function for pre-processed Criteo TSV records."""
       label_defaults = [[0.0]]
       dense_defaults = [
-          [0.0] for _ in range(self._num_dense_features)
+          [0] for _ in range(self._num_dense_features)
       ]
       num_sparse_features = len(self._vocab_sizes)
       categorical_defaults = [
-          [0] for _ in range(num_sparse_features)
+          [""] for _ in range(num_sparse_features)
       ]
       record_defaults = label_defaults + dense_defaults + categorical_defaults
       fields = tf.io.decode_csv(
@@ -88,7 +88,9 @@ class CriteoTsvReader:
 
       return features, label
 
-    filenames = tf.data.Dataset.list_files(self._file_pattern, shuffle=False)
+    # filenames = tf.data.Dataset.list_files(self._file_pattern, shuffle=False)
+    filenames = tf.data.Dataset.from_tensor_slices([self._file_pattern] * 23)
+
 
     # Shard the full dataset according to host number.
     # Each host will get 1 / num_of_hosts portion of the data.

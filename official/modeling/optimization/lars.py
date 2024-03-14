@@ -22,7 +22,7 @@ import tensorflow as tf, tf_keras
 # pylint: disable=protected-access
 
 
-class LARS(tf_keras.optimizers.legacy.Optimizer):
+class LARS(tf.keras.optimizers.Optimizer):
   """Layer-wise Adaptive Rate Scaling for large batch training.
 
   Introduced by "Large Batch Training of Convolutional Networks" by Y. You,

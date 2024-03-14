@@ -43,7 +43,7 @@ def _var_key(var):
   return var._unique_id
 
 
-class SGDTorch(tf_keras.optimizers.legacy.Optimizer):
+class SGDTorch(tf.keras.optimizers.Optimizer):
   """Optimizer that simulates the SGD module used in pytorch.
 
 

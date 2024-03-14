@@ -216,9 +216,7 @@ class Controller:
     self.global_step = global_step
     self.checkpoint_manager = checkpoint_manager
     self._enable_async_checkpoint_saving = enable_async_checkpointing
-    self._checkpoint_options = tf.train.CheckpointOptions(
-        enable_async=enable_async_checkpointing
-    )
+    self._checkpoint_options = tf.train.CheckpointOptions()
 
     if self.trainer is not None:
       self.step_timer = None
@@ -254,7 +252,9 @@ class Controller:
     # Set Orbit framework gauge to True value
     _orbit_api_gauge.get_cell().set(True)
 
-  def train(self, steps: int, checkpoint_at_completion: bool = True):
+  def train(self, steps: int,
+                             checkpoint_at_completion: bool = True,
+                             batch_size=0):
     """Runs training until the specified global step count has been reached.
 
     This method makes calls to `self.trainer.train()` until the global step
@@ -270,23 +270,31 @@ class Controller:
       steps: The global step count to train up to.
       checkpoint_at_completion: Whether to save a checkpoint when this method
         returns (regardless of the checkpointing interval). Defaults to `True`.
+      batch_size: EASL parameter; this is used to calculate how many instances
+        were produced
     """
     self._require("trainer", for_method="train")
 
     # TODO(momernick): Support steps=None or -1 (training to exhaustion).
     current_step = self.global_step.numpy()  # Cache, since this is expensive.
     _log(f"train | step: {current_step: 6d} | training until step {steps}...")
+
+    start = time.time()
     while current_step < steps:
       # Calculates steps to run for the next train loop.
       num_steps = min(steps - current_step, self.steps_per_loop)
       self._train_n_steps(num_steps)
-      self._maybe_save_checkpoint()
+      # self._maybe_save_checkpoint()
       current_step = self.global_step.numpy()
+    elapsed = time.time() - start
+    _log(f"Complete training with {steps} steps in {elapsed} seconds")
+    _log(f"> In total the pipeline generated {steps} * {batch_size} / {elapsed}"
+         f" [instances / s] = {steps * batch_size / elapsed} [instances / s]")
 
-    if checkpoint_at_completion:
-      self._maybe_save_checkpoint(check_interval=False)
-
-    self._sync_on_async_checkpointing()
+    # EASL: Disabled the checkpointing logic here
+    # if checkpoint_at_completion:
+    #   self._maybe_save_checkpoint(check_interval=False)
+    # self._sync_on_async_checkpointing()
 
   def evaluate(self, steps: int = -1) -> Optional[runner.Output]:
     """Runs evaluation for the given number of steps.
@@ -519,11 +527,12 @@ class Controller:
     # Verify that global_step was updated properly, then update current_step.
     expected_step = current_step + num_steps
     if self.global_step.numpy() != expected_step:
-      message = (
-          f"`trainer.train({num_steps})` did not update `global_step` by "
-          f"{num_steps}. Old value was {current_step}, expected updated value "
-          f"to be {expected_step}, but it was {self.global_step.numpy()}.")
-      logging.warning(message)
+      self.global_step.assign(expected_step)
+      # message = (
+      #     f"`trainer.train({num_steps})` did not update `global_step` by "
+      #     f"{num_steps}. Old value was {current_step}, expected updated value "
+      #     f"to be {expected_step}, but it was {self.global_step.numpy()}.")
+      # logging.warning(message)
 
     train_output = train_output or {}
     for action in self.train_actions:
@@ -532,9 +541,9 @@ class Controller:
 
     current_step = self.global_step.numpy()
     steps_per_second = self.step_timer.steps_per_second()
-    _log(f"train | step: {current_step: 6d} | "
-         f"steps/sec: {steps_per_second: 6.1f} | "
-         f"output: {_format_output(train_output)}")
+    # _log(f"train | step: {current_step: 6d} | "
+    #      f"steps/sec: {steps_per_second: 6.1f} | "
+    #      f"output: {_format_output(train_output)}")
 
     train_output["steps_per_second"] = steps_per_second
     self.summary_manager.write_summaries(train_output)
