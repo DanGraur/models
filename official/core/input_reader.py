@@ -166,7 +166,7 @@ def _read_tfds(tfds_name: Text,
       interleave_block_length=block_length,
       input_context=input_context,
       shuffle_seed=seed,
-      repeat_filenames=repeat_filenames,
+      # repeat_filenames=repeat_filenames,
       # Only assert cardinality when we have a finite dataset.
       assert_cardinality=not repeat_filenames,
       skip_prefetch=True)

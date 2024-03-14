@@ -201,11 +201,12 @@ class Trainer(_AsyncTrainer):
       checkpoint_items = self.model.checkpoint_items
     else:
       checkpoint_items = {}
-    self._checkpoint = tf.train.Checkpoint(
-        global_step=self.global_step,
-        model=self.model,
-        optimizer=self.optimizer,
-        **checkpoint_items)
+    # self._checkpoint = tf.train.Checkpoint(
+    #     global_step=self.global_step,
+    #     model=self.model,
+    #     optimizer=self.optimizer,
+    #     **checkpoint_items)
+    self._checkpoint = None
 
     self._train_loss = tf_keras.metrics.Mean("training_loss", dtype=tf.float32)
     self._validation_loss = tf_keras.metrics.Mean(

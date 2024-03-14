@@ -77,7 +77,7 @@ def register_optimizer_cls(key: str,
                            optimizer_config_cls: Union[
                                tf.keras.optimizers.Optimizer,
                                tf.keras.optimizers.Optimizer,
-                               tf.keras.optimizers.experimental.Optimizer
+                               tf.keras.optimizers.Optimizer
                            ],
                            use_legacy_optimizer: bool = True):
   """Register customize optimizer cls.
