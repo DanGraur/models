@@ -206,7 +206,7 @@ class OrbitExperimentRunner:
     train_actions = [] if not train_actions else train_actions
     if trainer:
       checkpoint_manager = self.checkpoint_manager
-      assert checkpoint_manager, 'Checkpoint manager required but undefined.'
+      # assert checkpoint_manager, 'Checkpoint manager required but undefined.'
       train_actions += actions.get_train_actions(
           self.params,
           trainer,

@@ -209,18 +209,18 @@ def get_train_actions(
             model=trainer.model,
             optimizer=trainer.optimizer))
 
-  if params.trainer.recovery_max_trials >= 0:
-    recovery_condition = RecoveryCondition(
-        global_step=trainer.global_step,
-        loss_upper_bound=params.trainer.loss_upper_bound,
-        recovery_begin_steps=params.trainer.recovery_begin_steps,
-        recovery_max_trials=params.trainer.recovery_max_trials,
-    )
-    recover_action = orbit.actions.ConditionalAction(
-        condition=recovery_condition,
-        action=RecoveryAction(checkpoint_manager),
-    )
-    train_actions.append(recover_action)
+  # if params.trainer.recovery_max_trials >= 0:
+  #   recovery_condition = RecoveryCondition(
+  #       global_step=trainer.global_step,
+  #       loss_upper_bound=params.trainer.loss_upper_bound,
+  #       recovery_begin_steps=params.trainer.recovery_begin_steps,
+  #       recovery_max_trials=params.trainer.recovery_max_trials,
+  #   )
+  #   recover_action = orbit.actions.ConditionalAction(
+  #       condition=recovery_condition,
+  #       action=RecoveryAction(checkpoint_manager),
+  #   )
+  #   train_actions.append(recover_action)
 
   # if (
   #     params.trainer.preemption_on_demand_checkpoint

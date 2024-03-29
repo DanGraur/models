@@ -264,4 +264,4 @@ class SentencePredictionTextDataLoader(data_loader.DataLoader):
         decoder_fn=self._decode if self._params.input_path else None,
         params=self._params,
         postprocess_fn=self._bert_preprocess)
-    return reader.read(input_context)
+    return reader.read(input_context).repeat()
