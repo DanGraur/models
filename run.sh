@@ -45,6 +45,30 @@ elif [ "${model}" == "bert-remote" ]; then
     ${base_params_override}
     "
 
+elif [ "${model}" == "lambert" ]; then
+  experiment="bert/sentence_prediction"
+  executable="official/nlp/train.py"
+  task_config_file=`pwd`/"official/nlp/configs/experiments/glue_mnli_matched.yaml"
+  params_override="task.train_data.input_path=${bucket}/mnli_train.tf_record,
+    task.validation_data.input_path=${bucket}/mnli_eval.tf_record,
+    trainer.train_steps=2,
+    trainer.validation_steps=4,
+    task.hub_module_url=https://tfhub.dev/tensorflow/lambert_en_uncased_L-24_H-1024_A-16/1,
+    ${base_params_override}
+    "
+
+elif [ "${model}" == "roberta" ]; then
+  experiment="bert/sentence_prediction"
+  executable="official/nlp/train.py"
+  task_config_file=`pwd`/"official/nlp/configs/experiments/glue_mnli_matched.yaml"
+  params_override="task.train_data.input_path=${bucket}/mnli_train.tf_record,
+    task.validation_data.input_path=${bucket}/mnli_eval.tf_record,
+    trainer.train_steps=2,
+    trainer.validation_steps=4,
+    task.hub_module_url=https://tfhub.dev/jeongukjae/roberta_en_cased_L-12_H-768_A-12/1,
+    ${base_params_override}
+    "
+
 else
   echo "Model ${model} is not supported. Only valid options are: \"resnet\" and \"bert\"!"
 fi
